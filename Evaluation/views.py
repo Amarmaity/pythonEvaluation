@@ -15,14 +15,14 @@ def userLogin(request):
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(email=email)
+            master = Master.objects.get(email=email)
         except User.DoesNotExist:
             messages.error(request, 'No user found with this email.')
             return redirect('login')
 
         # Authenticate using username and password
-        user = authenticate(request, username=user.username, password=password)
-        if user is None:
+        master = authenticate(request, email=master.email, password=password)
+        if master is None:
             messages.error(request, 'Incorrect password.')
             return redirect('login')
 
@@ -36,7 +36,7 @@ def userLogin(request):
             messages.error(request, 'User type mismatch.')
             return redirect('login')
 
-        login(request, user)
+        login(request, master)
         return redirect('SuperAdminDashboard')  # Make sure this URL name exists
 
     # ✅ Fix: Return login page for GET request

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'SuperAdmin',
 ]
 
+AUTH_USER_MODEL = 'SuperAdmin.Master'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

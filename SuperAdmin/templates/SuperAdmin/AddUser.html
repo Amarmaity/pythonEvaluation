@@ -1,57 +1,57 @@
-{% extends "layouts/layouts.html" %}
-
-{% block title %}Dashboard | Add User{% endblock %}
-
+{% extends "layouts/layouts.html" %} 
+{% block title %}Dashboard | Add User{%endblock %} 
 {% block content %}
 
 <style>
-    /* Remove the dropdown arrow inside the Select2 box (single select) */
-    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
-        display: none !important;
-    }
+  /* Remove the dropdown arrow inside the Select2 box (single select) */
+  .select2-container--bootstrap-5
+    .select2-selection--single
+    .select2-selection__arrow {
+    display: none !important;
+  }
 
-    .select2-container--bootstrap-5 .select2-selection--single {
-        padding-right: 0.75rem !important;
-        background-image: none !important;
-    }
+  .select2-container--bootstrap-5 .select2-selection--single {
+    padding-right: 0.75rem !important;
+    background-image: none !important;
+  }
 </style>
 
 <div class="super-add-user-page">
-    <div class="content-block">
-        <input type="checkbox" id="block1">
-        <label for="block1" class="main-label">Add New User</label>
-        <div class="content">
-            <form action="{{ route('save_user') }}" method="POST" enctype="multipart/form-data" class="forms-block" id="userForm">
-                @csrf
+  <div class="content-block">
+    <label for="block1" class="main-label">Add New User</label>
+    <div class="content">
+      <form action="{% url 'SuperAdmin:save_user' %}" method="POST" enctype="multipart/form-data" class="forms-block" id="userForm">
+        {% csrf_token %}
 
-                <!-- PERSONAL INFO SECTION -->
-                <!-- (your form content here exactly as you wrote it) -->
+        <!-- PERSONAL INFO SECTION -->
+        <!-- (your form content here exactly as you wrote it) -->
 
-                <!-- END FORM CONTENT -->
+        <!-- END FORM CONTENT -->
 
-                <!-- Save Button -->
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary primary-btn" id="saveBtn">Save User</button>
-                </div>
-
-            </form>
+        <!-- Save Button -->
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary primary-btn" id="saveBtn"> Save User</button>
         </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <script>
-    document.getElementById('designation_dropdown').addEventListener('change', function () {
-        const selectedValue = this.value.trim();
-        const searchDiv = document.getElementById('search_manager_div');
-        const managerDiv = document.getElementById('manager_name_div');
+  document
+    .getElementById("designation_dropdown")
+    .addEventListener("change", function () {
+      const selectedValue = this.value.trim();
+      const searchDiv = document.getElementById("search_manager_div");
+      const managerDiv = document.getElementById("manager_name_div");
 
-        if (selectedValue === 'Manager') {
-            searchDiv.style.display = 'none';
-            managerDiv.style.display = 'block';
-        } else {
-            searchDiv.style.display = 'block';
-            managerDiv.style.display = 'none';
-        }
+      if (selectedValue === "Manager") {
+        searchDiv.style.display = "none";
+        managerDiv.style.display = "block";
+      } else {
+        searchDiv.style.display = "block";
+        managerDiv.style.display = "none";
+      }
     });
 </script>
 

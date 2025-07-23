@@ -107,7 +107,7 @@ def SaveUser(request):
             messages.error(request, f"Error saving user: {str(e)}")
             return redirect('add_user')
 
-    return render(request, 'your_template.html')  # Replace with your actual form template
+    return render(request, 'AddUser.html')  # Replace with your actual form template
 
 
 

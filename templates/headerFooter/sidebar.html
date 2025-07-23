@@ -92,7 +92,7 @@
         {% if user_type == "Super User" %}
         <li class="nav-item">
           <a
-            href="{% url 'add_user' %}"
+            href="{% url 'SuperAdmin:add_user' %}"
             class="nav-link {% if request.resolver_match.url_name == 'add_user' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-person-plus"></i>
@@ -101,7 +101,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'create_client' %}"
+            href="{% url 'SuperAdmin:create_client' %}"
             class="nav-link {% if request.resolver_match.url_name == 'create_client' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-person-plus"></i>
@@ -110,7 +110,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'user_list' %}"
+            href="{% url 'SuperAdmin:user_list' %}"
             class="nav-link {% if request.resolver_match.url_name == 'user_list' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-people"></i>
@@ -119,7 +119,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'client_list' %}"
+            href="{% url 'SuperAdmin:client_list' %}"
             class="nav-link {% if request.resolver_match.url_name == 'client_list' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-people"></i>
@@ -128,7 +128,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'get_probation' %}"
+            href="{% url 'SuperAdmin:get_probation' %}"
             class="nav-link {% if request.resolver_match.url_name == 'get_probation' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-list"></i>
@@ -137,7 +137,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'super_search' %}"
+            href="{% url 'SuperAdmin:super_search' %}"
             class="nav-link {% if request.resolver_match.url_name == 'super_search' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-search"></i>
@@ -146,7 +146,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'appraisal_view' %}"
+            href="{% url 'SuperAdmin:appraisal_view' %}"
             class="nav-link {% if request.resolver_match.url_name == 'appraisal_view' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-graph-up-arrow"></i>
@@ -155,7 +155,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'financial_view' %}"
+            href="{% url 'SuperAdmin:financial_view' %}"
             class="nav-link {% if request.resolver_match.url_name == 'financial_view' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-calendar-range"></i>
@@ -164,7 +164,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'financial_view_tables' %}"
+            href="{% url 'SuperAdmin:financial_view_tables' %}"
             class="nav-link {% if request.resolver_match.url_name == 'financial_view_tables' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-bar-chart-line"></i>
@@ -173,7 +173,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'get_pending_appraisal' %}"
+            href="{% url 'SuperAdmin:get_pending_appraisal' %}"
             class="nav-link {% if request.resolver_match.url_name == 'get_pending_appraisal' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-list"></i>
@@ -182,7 +182,7 @@
         </li>
         <li class="nav-item">
           <a
-            href="{% url 'setting_view' %}"
+            href="{% url 'SuperAdmin:setting_view' %}"
             class="nav-link {% if request.resolver_match.url_name == 'setting_view' %}active{% endif %}"
           >
             <i class="nav-icon bi bi-gear"></i>

@@ -3,6 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Master
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Master
+from datetime import datetime
 
 @login_required(login_url='login')
 def viewSuperAdminDashboard(request):
@@ -20,11 +24,12 @@ def AddUser(request):
     })
 
 
+
 def SaveUser(request):
     if request.method == 'POST':
-        #Extract data from POST
-        email = request.POST.get('email')
-        name = request.POST.get('name')
+        # Extract data from POST
+        email = request.POST.get('email', '').strip()
+        name = request.POST.get('name', '').strip()
         joining_date = request.POST.get('dob')
         gender = request.POST.get('gender')
         ph_no = request.POST.get('ph_no')
@@ -34,12 +39,12 @@ def SaveUser(request):
         manager_name = request.POST.get('manager_name')
         designation = request.POST.get('designation')
         user_type = request.POST.get('user_type')
-        user_role = request.POST.get('user_roles[]')
+        user_roles = request.POST.getlist('user_roles[]')  # Important for multiple roles
         salary = request.POST.get('salry')
         salary_grade = request.POST.get('salary_grade')
         probation_date = request.POST.get('probation_date')
 
-        #validation
+        # Validation
         errors = []
 
         if not email:
@@ -50,15 +55,59 @@ def SaveUser(request):
             errors.append('Mobile number must be at least 10 digits.')
         if not designation:
             errors.append('Designation is required.')
-        if not salary or not salary.isdigit():
-            errors.append('Valid salary is require.')
+        if not salary or not salary.replace('.', '', 1).isdigit():
+            errors.append('Valid salary is required.')
+
+        # Check if email or employee ID already exists
         if Master.objects.filter(email=email).exists():
             errors.append('A user with this email already exists.')
-        if Master.objects.filter(emp_id = emp_id).exists():
-            errors.append('A user with this employee_id is already exists.')
-        if Master.objects.filter(joining_date => probation_date).exists():
-        
+        if emp_id and Master.objects.filter(emp_id=emp_id).exists():
+            errors.append('A user with this employee ID already exists.')
 
+        # Date validation
+        try:
+            if joining_date and probation_date:
+                joining_date_obj = datetime.strptime(joining_date, "%Y-%m-%d").date()
+                probation_date_obj = datetime.strptime(probation_date, "%Y-%m-%d").date()
+
+                if probation_date_obj < joining_date_obj:
+                    errors.append("Probation date cannot be before joining date.")
+        except Exception as e:
+            errors.append("Invalid date format for joining or probation date.")
+
+        # If validation fails
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return redirect('add_user')  # Replace with your actual form page URL name
+
+        # Save to Master table
+        try:
+            Master.objects.create(
+                email=email,
+                name=name,
+                joining_data=joining_date,
+                gender=gender,
+                ph_no=ph_no,
+                emp_id=emp_id,
+                evaluation_pourpos=evaluation_pourpos,
+                division=division,
+                manager_name=manager_name,
+                designation=designation,
+                user_type=user_type,
+                user_role=user_roles,  # JSONField
+                salary=salary,
+                salary_grade=salary_grade,
+                probation_date=probation_date
+            )
+            messages.success(request, 'User created successfully.')
+            return redirect('add_user')  # Or wherever you want to redirect after success
+
+        except Exception as e:
+            messages.error(request, f"Error saving user: {str(e)}")
+            return redirect('add_user')
+
+    return render(request, 'your_template.html')  # Replace with your actual form template
 
 
 

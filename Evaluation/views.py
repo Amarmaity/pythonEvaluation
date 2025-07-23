@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from SuperAdmin.models import Master 
+from SuperAdmin.models import Master
+from django.contrib.auth import logout
 
+@login_required(login_url='login') 
 def home(request):
     return render(request, 'login/UserLogin.html')
 
@@ -16,7 +18,7 @@ def userLogin(request):
 
         try:
             master = Master.objects.get(email=email)
-        except User.DoesNotExist:
+        except Master.DoesNotExist:
             messages.error(request, 'No user found with this email.')
             return redirect('login')
 
@@ -42,3 +44,7 @@ def userLogin(request):
     # ✅ Fix: Return login page for GET request
     return render(request, 'login/UserLogin.html')
 
+
+def Logout(request):
+    logout(request)
+    return redirect('login')

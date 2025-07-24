@@ -39,7 +39,7 @@ def userLogin(request):
             return redirect('login')
 
         login(request, master)
-        return redirect('SuperAdminDashboard')  # Make sure this URL name exists
+        return redirect('SuperAdmin:SuperAdminDashboard')  # Make sure this URL name exists
 
     # ✅ Fix: Return login page for GET request
     return render(request, 'login/UserLogin.html')

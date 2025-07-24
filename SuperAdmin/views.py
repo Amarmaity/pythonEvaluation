@@ -26,11 +26,14 @@ def AddUser(request):
 
 
 def SaveUser(request):
+    print("🔍 SaveUser view triggered")
     if request.method == 'POST':
         # Extract data from POST
+        print("✅ POST request received")
+        print("POST DATA:", request.POST)
         email = request.POST.get('email', '').strip()
         name = request.POST.get('name', '').strip()
-        joining_date = request.POST.get('dob')
+        joining_date = request.POST.get('joining_date')
         gender = request.POST.get('gender')
         ph_no = request.POST.get('ph_no')
         emp_id = request.POST.get('emp_id')
@@ -40,9 +43,14 @@ def SaveUser(request):
         designation = request.POST.get('designation')
         user_type = request.POST.get('user_type')
         user_roles = request.POST.getlist('user_roles[]')  # Important for multiple roles
-        salary = request.POST.get('salry')
+        salary = request.POST.get('salary')
         salary_grade = request.POST.get('salary_grade')
         probation_date = request.POST.get('probation_date')
+        password = request.POST.get('password')
+        cnf_password = request.POST.get('cnf_password')
+
+        # print("POST DATA",request.POST)
+
 
         # Validation
         errors = []
@@ -63,6 +71,8 @@ def SaveUser(request):
             errors.append('A user with this email already exists.')
         if emp_id and Master.objects.filter(emp_id=emp_id).exists():
             errors.append('A user with this employee ID already exists.')
+        if password != cnf_password:
+            errors.append('Passwords do not match.')
 
         # Date validation
         try:
@@ -79,14 +89,14 @@ def SaveUser(request):
         if errors:
             for error in errors:
                 messages.error(request, error)
-            return redirect('add_user')  # Replace with your actual form page URL name
+            return redirect('SuperAdmin:add_user')  # Replace with your actual form page URL name
 
         # Save to Master table
         try:
-            Master.objects.create(
+            user = Master.objects.create(
                 email=email,
                 name=name,
-                joining_data=joining_date,
+                joining_date=joining_date,
                 gender=gender,
                 ph_no=ph_no,
                 emp_id=emp_id,
@@ -98,14 +108,18 @@ def SaveUser(request):
                 user_role=user_roles,  # JSONField
                 salary=salary,
                 salary_grade=salary_grade,
-                probation_date=probation_date
+                probation_date=probation_date,
             )
+            user.set_password(password)
+            user.save()
+
             messages.success(request, 'User created successfully.')
-            return redirect('add_user')  # Or wherever you want to redirect after success
+            return redirect('SuperAdmin:add_user')  # Or wherever you want to redirect after success
 
         except Exception as e:
+            print("❌ Exception occurred:", e)
             messages.error(request, f"Error saving user: {str(e)}")
-            return redirect('add_user')
+            return redirect('SuperAdmin:add_user')
 
     return render(request, 'AddUser.html')  # Replace with your actual form template
 

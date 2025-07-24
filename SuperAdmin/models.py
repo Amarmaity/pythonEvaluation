@@ -16,6 +16,7 @@ class MasterManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
 
+
 class Master(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = [
         ('Male', 'Male'),
@@ -32,13 +33,13 @@ class Master(AbstractBaseUser, PermissionsMixin):
         ('Hr', 'Hr'),
     ]
 
-    USER_ROLE_CHOICE = [
+    # USER_ROLE_CHOICE = [
 
-        ('Admin', 'Admin'),
-        ('Manager', 'Manager'),
-        ('Client', 'Client'),
-        ('Hr', 'Hr')
-    ]
+    #     ('Admin', 'Admin'),
+    #     ('Manager', 'Manager'),
+    #     ('Client', 'Client'),
+    #     ('Hr', 'Hr')
+    # ]
 
     DESIGNATION_CHOICE = [
         ('Hr', 'Hr'),
@@ -53,7 +54,7 @@ class Master(AbstractBaseUser, PermissionsMixin):
     
     email = models.EmailField(unique=True, null=False, blank=False)
     name = models.CharField(max_length=255, null=True, blank=True)
-    joining_data = models.DateField(null=True, blank=True)
+    joining_date = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True)
     ph_no = models.CharField(max_length=20, null=True, blank=True)
     emp_id = models.CharField(max_length=100, null=True, blank=True)
@@ -62,7 +63,7 @@ class Master(AbstractBaseUser, PermissionsMixin):
     manager_name = models.CharField(max_length=255, null=True, blank=True)
     designation = models.CharField(max_length=100, choices=DESIGNATION_CHOICE, null=True, blank=True)
     user_type = models.CharField(max_length=50, choices=USER_TYPE_CHOICE, null=True, blank=True)
-    user_role = models.JSONField(choices=USER_ROLE_CHOICE, null=True, blank=True)
+    user_role = models.JSONField(null=True, blank=True)
     salary = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     salary_grade = models.CharField(max_length=50, null=True, blank=True)
     company_percentage = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)

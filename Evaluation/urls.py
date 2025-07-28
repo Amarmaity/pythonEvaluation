@@ -29,6 +29,7 @@ urlpatterns = [
     path('login/', views.userLogin, name='login'),
     path('logout/', views.Logout, name='logout_users'),
     path('superadmin/', include('SuperAdmin.urls')),
+    path('client/',include('Client.urls')),
 
 
 ]

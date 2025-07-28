@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'SuperAdmin',
+    'Client'
 ]
 
 AUTH_USER_MODEL = 'SuperAdmin.Master'

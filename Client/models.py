@@ -9,6 +9,7 @@ class Client(models.Model):
     company_name = models.CharField(max_length=100, null=True, blank=True)
     client_mobile_number = models.CharField(max_length=20, null=True, blank=True)
     client_email = models.CharField(unique=True, null=False, blank=False)
+    user_type = models.CharField(max_length=50, null=True, blank=True)
     password = models.CharField(max_length=128)
 
     def save(self, *args, **kwargs):

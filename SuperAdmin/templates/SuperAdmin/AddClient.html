@@ -1,7 +1,97 @@
 {% extends "layouts/layouts.html" %}
-
 {% block title %}Dashboard | Add Client{% endblock %}
-
 {% block content %}
-<h1>Hi I'm Add Client</h1>
+{% load static %}
+
+{% if messages %}
+  <script>
+    {% for message in messages %}
+      alert("{{ message|escapejs }}");
+    {% endfor %}
+  </script>
+{% endif %}
+
+<div class="super-add-user-page">
+    <div class="content-block">
+        {% comment %} <input type="checkbox" id="block1"> {% endcomment %}
+        <label for="block1" class="main-lable">Add New Client</label>
+        <div class="content">
+            <form action="{% url "SuperAdmin:save_client" %}" method="POST" enctype="multipart/form-data" class="forms-block" id="userForm">
+                {% csrf_token %}
+                <div class="form-section">
+                    <h5 heading-three>Client Information</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="client-name" class="froms-label">Client Name</label>
+                            <input type="text" class="form-control" id="client-name" name="client_name" placeholder="Enter client name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="company-name" class="froms-label">Company Name</label>
+                            <input type="text" class="form-control" id="company-name" name="company_name" placeholder="Enter company name" required>
+                        </div>
+
+                        <div class="form-section">
+                            <h5 class="heading-three">Contact Information</h5>
+                            <div class="row g3">
+                                <div class="col-md-6">
+                                    <label for="client-mobile-number" class="froms-label">Contact Number</label>
+                                    <input type="tel" class="form-control" id="client-mobile-number" name="client_mobile_number" placeholder="Enter contact number" required min="10" max="20">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="client-mail" class="froms-label">Email</label>
+                                    <input type="email" class="form-control" id="client-email" name="client_email" placeholder="Enter email" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" style="display: none;">
+                            <label for="user_type" class="forms-label">User Type</label>
+                            <select class="form-control" id="user_type" name="user_type" required>
+                                <option value="" selected >Select User Type</option>
+                                <option value="client" selected>Client</option>
+                            </select>
+                        </div>
+
+                         <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="password" class="forms-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Enter password" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="cnf-password" class="forms-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="cnf-password" name="cnf-password" placeholder="Confirm password"
+                                    required>
+                            </div>
+                        </div>
+
+                        {% comment %} Script for Password  {% endcomment %}
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                const form = document.getElementById("userForm");
+
+                                form.addEventListener("submit", function (e) {
+                                const password = document.getElementById("password").value;
+                                const confirmPassword = document.getElementById("cnf-password").value;
+
+                                if (password !== confirmPassword) {
+                                    e.preventDefault(); // stop form submission
+                                    alert("Passwords do not match!");
+                                }
+                                });
+                            });
+                        </script>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary primary-btn" id="saveBtn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock  %}

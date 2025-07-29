@@ -1,11 +1,13 @@
 from genericpath import exists
+import re
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Master
+
+from Client.models import Client
+from SuperAdmin.models import Master
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Master
 from datetime import datetime
 
 @login_required(login_url='login')
@@ -25,6 +27,8 @@ def AddUser(request):
 
 
 
+
+# Save user
 def SaveUser(request):
     print("🔍 SaveUser view triggered")
     if request.method == 'POST':
@@ -56,23 +60,39 @@ def SaveUser(request):
         errors = []
 
         if not email:
-            errors.append('Email is required.')
+            messages.errors('Email is required.')
+        elif Client.objects.filter(email=email):
+            messages.error(request,"This email is already registered.")
+            return redirect('SuperAdmin:add_user')
+        
         if not name:
-            errors.append('Name is required.')
+            messages.errors('Name is required.')
+            return redirect('SuperAdmin:add_user')
+        
         if not ph_no or len(ph_no) < 10:
-            errors.append('Mobile number must be at least 10 digits.')
+            messages.errors('Mobile number must be at least 10 digits.')
+            return redirect('SuperAdmin:add_user')
+        
         if not designation:
-            errors.append('Designation is required.')
+            messages.errors('Designation is required.')
+            return redirect('SuperAdmin:add_user')
+        
         if not salary or not salary.replace('.', '', 1).isdigit():
-            errors.append('Valid salary is required.')
+            messages.errors('Valid salary is required.')
+            return redirect('SuperAdmin:add_user')
 
         # Check if email or employee ID already exists
         if Master.objects.filter(email=email).exists():
-            errors.append('A user with this email already exists.')
+            messages.errors('A user with this email already exists.')
+            return redirect('SuperAdmin:add_user')
+        
         if emp_id and Master.objects.filter(emp_id=emp_id).exists():
-            errors.append('A user with this employee ID already exists.')
+            messages.errors('A user with this employee ID already exists.')
+            return redirect('SuperAdmin:add_user')
+        
         if password != cnf_password:
-            errors.append('Passwords do not match.')
+            messages.errors('Passwords do not match.')
+            return redirect('SuperAdmin:add_user')
 
         # Date validation
         try:
@@ -81,9 +101,12 @@ def SaveUser(request):
                 probation_date_obj = datetime.strptime(probation_date, "%Y-%m-%d").date()
 
                 if probation_date_obj < joining_date_obj:
-                    errors.append("Probation date cannot be before joining date.")
+                    messages.errors("Probation date cannot be before joining date.")
         except Exception as e:
-            errors.append("Invalid date format for joining or probation date.")
+            messages.errors("Invalid date format for joining or probation date.")
+            return redirect('SuperAdmin:add_user')
+        
+
 
         # If validation fails
         if errors:
@@ -125,6 +148,8 @@ def SaveUser(request):
 
 
 
+
+
 def AddClient(request):
     user_type = request.user.user_type
 
@@ -133,11 +158,81 @@ def AddClient(request):
     })
 
 
+
+
+
+
+# Save client data
+def SaveClient(request):
+    if request.method == 'POST':
+        client_name = request.POST.get('client_name')
+        company_name = request.POST.get('company_name')
+        client_mobile_number = request.POST.get('client_mobile_number')
+        client_email = request.POST.get('client_email')
+        user_type = request.POST.get('user_type')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('cnf-password')
+
+        # Validate Client Name
+        if not client_name or client_name.strip() == '':
+            messages.error(request, "Client name is required.")
+            return redirect('SuperAdmin:create_client')
+        elif not re.match(r'^[A-Za-z\s]+$', client_name):
+            messages.error(request, "Client name must contain only letters and spaces.")
+            return redirect('SuperAdmin:create_client')
+
+        # Validate Company Name
+        if not company_name:
+            messages.error(request, "Company name is required.")
+            return redirect('SuperAdmin:create_client')
+
+        # Validate Mobile Number
+        phone_pattern = re.compile(r'^\+?[\d\s\-()]{7,20}$')
+
+        if not client_mobile_number or not phone_pattern.match(client_mobile_number):
+            messages.error(request, "Enter a valid mobile number (e.g., +1 (709) 749-4176).")
+            return redirect('SuperAdmin:create_client')
+
+        # Validate Email Uniqueness
+        if Client.objects.filter(client_email=client_email).exists():
+            messages.error(request, "This email is already registered.")
+            return redirect('SuperAdmin:create_client')
+
+        # Validate Password Match
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('SuperAdmin:create_client')
+
+        # Save to DB
+        try:
+            user = Client.objects.create(
+                client_name=client_name,
+                company_name=company_name,
+                client_email=client_email,
+                client_mobile_number=client_mobile_number,
+                user_type=user_type,
+                password=password
+            )
+
+            messages.success(request, "User created successfully.")
+            return redirect('SuperAdmin:create_client')
+
+        except Exception as e:
+            print("❌ Exception occurred:", e)
+            messages.error(request, f"Error saving user: {str(e)}")
+            return redirect('SuperAdmin:create_client')
+
+
+
+
+
 def UserManagement(request):
     user_type = request.user.user_type
+    all_users = Master.objects.all()
 
     return render(request, 'SuperAdmin/UserManagement.html', {
-        'user_type': user_type
+        'user_type': user_type,
+        'all_users': all_users,
     })
 
 

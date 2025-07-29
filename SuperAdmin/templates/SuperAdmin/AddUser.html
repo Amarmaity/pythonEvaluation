@@ -17,6 +17,14 @@
   }
 </style>
 
+{% if messages %}
+  <script>
+    {% for message in messages %}
+      alert("{{ message|escapejs }}");
+    {% endfor %}
+  </script>
+{% endif %}
+
 <div class="super-add-user-page">
   <div class="content-block">
     <label for="block1" class="main-label">Add New User</label>
@@ -39,7 +47,7 @@
               <select class="form-control" name="gender" id="gener" required>
                 <option value="" selected disabled>Select Gender</option>
                 <option value="male">Male</option>
-                <option value="female"Female>Female</option>
+                <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
             </div>

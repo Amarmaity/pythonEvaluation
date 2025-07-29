@@ -9,6 +9,7 @@ urlpatterns = [
     path('add-user/', views.AddUser,name='add_user'),
     path('save-user/', views.SaveUser, name='save_user'),
     path('create-client/', views.AddClient, name='create_client'),
+    path('save-client/', views.SaveClient, name='save_client'),
     path('user-management/', views.UserManagement, name='user_list'),
     path('client-management/', views.ClientManagement, name='client_list'),
     path('probation-period/', views.ProbationPeriod, name='get_probation'),

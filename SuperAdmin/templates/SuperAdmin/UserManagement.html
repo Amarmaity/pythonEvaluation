@@ -1,7 +1,53 @@
 {% extends "layouts/layouts.html" %}
-
 {% block title %}Dashboard | User Management{% endblock %}
-
 {% block content %}
-<h1>Hi I'm User Management</h1>
+{% load static %}
+
+
+<div class="super-user-management">
+    <h1 class="client__heading">Active Employees</h1>
+    <div class="client__item">
+        <input type="search" id="emp_search" name="search" class="from-control super__user__search" placeholder="Search" aria-label="Search">
+        <button class="client__btn" type="submit">
+            <img src="{% static 'images/search.png' %}" alt="Search">
+        </button>
+    </div>
+</div>
+
+<div class="container table-container list-user-page">
+    <div class="table-responsive table-wrapper">
+        <table id="userTable" class="table  table-bordered table-hover table-view user-list-table modified-table" class="user-list" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Employee Id</th>
+                    <th>Designation</th>
+                    <th>Salary</th>
+                    <th>Salary Graded</th>
+                    <th>Mobile Number</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                 {% for user in all_users %}
+                <tr>
+                    <th>{{user.name}}</th>
+                    <th>{{user.emp_id}}</th>
+                    <th>{{user.designation}}</th>
+                    <th>{{user.salary}}</th>
+                    <th>{{user.salary_grade}}</th>
+                    <th>{{user.ph_no}}</th>
+                    <th>{{user.email}}</th>
+                    <th>{{user.is_active}}</th>
+                    <th></th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
 {% endblock  %}

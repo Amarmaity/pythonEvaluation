@@ -2,13 +2,15 @@ from genericpath import exists
 import re
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
+import json
 from Client.models import Client
 from SuperAdmin.models import Master
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from datetime import datetime
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url='login')
 def viewSuperAdminDashboard(request):
@@ -234,6 +236,43 @@ def UserManagement(request):
         'user_type': user_type,
         'all_users': all_users,
     })
+
+
+
+@csrf_exempt
+def ToggleStatus(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print("Raw request body:", request.body)
+            print("Parsed data:", data)
+
+            obj_id = data.get('id')
+            status = data.get('status')
+            print(f"ID: {obj_id}, Status: {status}")
+
+            # Convert string to boolean if needed
+            if isinstance(status, str):
+                status = status.lower() == 'true'
+
+            status = 1 if status else 0
+
+            obj = Master.objects.get(id=obj_id)
+            obj.is_active = status
+            obj.save()
+
+            return JsonResponse({'success': True, 'new_status': obj.is_active})
+        
+        except Master.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Invalid ID'}, status=404)
+        
+        except Exception as e:
+            print("Unhandled exception:", str(e))
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+
 
 
 def ClientManagement(request):

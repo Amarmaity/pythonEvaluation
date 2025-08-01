@@ -1,0 +1,76 @@
+{% extends "layouts/layouts.html" %}
+{% block title %}Dashboard | Edit User{% endblock %}
+{% block content %}
+{% load static %}
+
+<div class="edit-user-form">
+    <div class="back-button">
+        <a href="{% url "SuperAdmin:user_list" %}" class="btn btn-secondary">Back</a>
+    </div>
+
+    {% for user in all_user %}
+        {% if user.id == user_id%}
+    <div class="content-block">
+        <label for="block1" class="main-label">Edit Employee Details: {{user.name}} - {{user.emp_id}}</label>
+    </div>
+    <div class="content">
+        <form action="{% url "" user.id %}" method="POST" class="forms-block">
+            {% csrf_token %}
+            <div class="row from-section">
+                <div class="col-md-6">
+                    <label for="name" class="forms-label">Name</label>
+                    <input type="text" name="name" id="name" class="form-control" value="{{user.name}}" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="ph-no" class="forms-label">Mobile Number</label>
+                    <input type="tel" name="ph_no" id="ph_no" class="form-control" value="{{user.ph_no}}">
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="forms-label">Email Address</label>
+                    <input type="email" name="email" id="email" class="form-control" value="{{user.email}}">
+                </div>
+                <div class="col-md-6">
+                    <label for="employee_id" class="forms-label">Employee ID</label>
+                    <input type="text" name="emp_id" id="emp_id" class="form-control" value="{{user.emp_id}}" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="joning_date" class="forms-label">Joining Date</label>
+                    <input type="date" name="joning_date" id="joining_date" class="form-control" value="{{user.joining_date}}">
+                </div>
+                <div class="col-md-6">
+                    <label for="gender" class="forms-label">Gender</label>
+                    <select name="gender" id="gender">
+                        <option value="male" {% if user.gender == "male" %}selected{% endif %}>Male</option>
+                        <option value="female" {% if user.gender == "female" %}selected{% endif %}>Female</option>
+                        <option value="other" {% if user.gender == "other" %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="designtion" class="forms-label">Select Designation</label>
+                    <select name="designtion" class="form-control" id="designation">
+                        <option value="Hr" {% if user.designation == "Hr" %}selected{% endif %}>Hr</option>
+                        <option value="Seo" {% if user.designation == "Seo" %}selected{% endif %}>Seo</option>
+                        <option value="Admin" {% if user.designation == "Admin" %}selected{% endif %}>Admin</option>
+                        <option value="UI/UX Designer" {% if user.designation == "UI/UX Designer" %}selected{% endif %}>UI/UX Designer</option>
+                        <option value="Quality Analyst" {% if user.designation == "Quality Analyst" %}selected{% endif %}>Quality Analyst</option>
+                        <option value="Software Developer" {% if user.designation == "Software Developer" %}selected{% endif %}>Software Developer</option>
+                        <option value="Manager" {% if user.designation == "Manager" %}selected{% endif %}>Manager</option>
+                        <option value="Business Development" {% if user.designation == "Business Development" %}selected{% endif %}>Business Development(Sales)</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="division" class="forms-label">Division</label>
+                    <select name="division" id="division">
+                        <option value="Kasba Office" {% if user.division == 'Kasba Office' %}selected{% endif %}>Kasba Office</option>
+                        <option value="Salt Lake 3B" {% if user.division == 'Salt Lake 3B' %}selected{% endif %}>Salt Lake 3B</option>
+                        <option value="Salt Lake 17B" {% if user.division == 'Salt Lake 17B' %}selected{% endif %}>Salt Lake 17B</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock  %}

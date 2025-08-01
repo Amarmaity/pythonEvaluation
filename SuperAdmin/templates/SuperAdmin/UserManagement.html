@@ -2,7 +2,7 @@
 {% block title %}Dashboard | User Management{% endblock %}
 {% block content %}
 {% load static %}
-
+<script src="{% static 'js/table-search.js' %}"></script>
 <style>
 
     .edit-user{
@@ -18,9 +18,7 @@
     <h1 class="client__heading">Active Employees</h1>
     <div class="client__item">
         <input type="search" id="emp_search" name="search" class="from-control super__user__search" placeholder="Search" aria-label="Search">
-        <button class="client__btn" type="submit">
-            <img src="{% static 'images/search.png' %}" alt="Search">
-        </button>
+            {% comment %} <img src="{% static 'images/search.png' %}" alt="Search"> {% endcomment %}
     </div>
 </div>
 
@@ -65,7 +63,7 @@
                         </div>
 
                         <div class="form-edit edit-link">
-                        <a href="#">
+                        <a href="{% url 'SuperAdmin:edit_user' user.id %}">
                         <span class="glyphicon glyphicon-edit"></span>
                         </a>
                         </div>
@@ -114,5 +112,12 @@ document.querySelectorAll('.status-switch').forEach(switchEl => {
 </script>
 
 
+
+
+<script>
+    // Setup the table search
+    // 0 = name, 1 = emp_id, 6 = email columns (adjust if needed)
+    setupTableSearch('emp_search', 'userTable', [0, 1, 6]);
+</script>
 
 {% endblock  %}

@@ -274,6 +274,16 @@ def ToggleStatus(request):
 
 
 
+def EditUser(request, id):
+    user_type = request.user.user_type
+    all_user = Master.objects.all()
+
+    return render(request, 'SuperAdmin/EditUser.html',{
+        'user_type' : user_type,
+        'user_id' : id,
+        'all_user' : all_user,
+    })
+
 
 def ClientManagement(request):
     user_type = request.user.user_type
